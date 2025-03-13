@@ -1,0 +1,40 @@
+# LaTeX intermediate files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.bcf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.run.xml
+
+# LaTeX document files
+*.dvi
+*.ps
+
+# Backup files
+*~
+*.bak
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+.DS_Store
