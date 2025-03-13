@@ -1,0 +1,208 @@
+\documentclass[fontsize=12pt,BCOR=5mm,DIV=12,parskip=half,listof=totoc,
+               paper=a4,toc=bibliography,pointlessnumbers]{scrreprt}
+               
+\usepackage[utf8]{inputenc}
+
+%% LANGUAGE SETTINGS
+%
+%\usepackage[ngerman]{babel} 	        % german language
+%\usepackage[german=quotes]{csquotes} 	% correct quoting using \enquote{}
+\usepackage[english]{babel}            % english language
+\usepackage{csquotes} 	                % correct quoting using \enquote{}
+
+%%%%%%%%%%%%%
+%% ZITIERSTIL
+%%%%%%%%%%%%%
+%
+% @stud: Zitierstil in package biblatex unten wählen
+%
+% NUMERIC Style - e. g. [12]
+% style=numeric 
+%
+% IEEE Style - numeric kind of style 
+% style=ieee 
+%
+% ALPHABETIC Style - e. g. [AB12]
+% style=alphabetic 
+%
+% HARVARD Style 
+% style=apa 
+%
+% CHICAGO Style 
+% style=authoryear
+%
+% Position des Zitats:
+%
+% autocite=inline 
+%
+% (!!) FOOTNOTE POSITION NOT RECOMMENDED IN MINT DOMAIN:
+% autocite=footnote
+%
+\usepackage[backend=biber, autocite=inline, style=apa]{biblatex} 	
+\usepackage{makeidx}                  % allows index generation
+\usepackage{listings}	              %Format Listings properly
+\usepackage{lipsum}                   % Blindtext
+\usepackage{graphicx}                 % use various graphics formats
+\usepackage[german]{varioref}         % nicer references \vref
+\usepackage{caption}	              % better Captions
+\usepackage{booktabs}                 % nicer Tabs
+\usepackage[hidelinks=true]{hyperref} % keine roten Markierungen bei Links
+\usepackage{fnpct}                    % Correct superscripts 
+\usepackage{calc}                     % Used for extra space below footsepline, in particular
+\usepackage{array}
+\usepackage{acronym}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{tocloft}
+\usepackage[T1]{fontenc}
+
+% Definitionen und Commands
+\newcommand{\indextype}{numeric}
+\newcommand{\abs}{\par\vskip 0.2cm\goodbreak\noindent}
+\newcommand{\nl}{\par\noindent}
+\newcommand{\mcl}[1]{\mathcal{#1}}
+\newcommand{\nowrite}[1]{}
+\newcommand{\NN}{{\mathbb N}}
+\newcommand{\imagedir}{img}
+\newcommand{\TitelDerArbeit}[1]{\def\DerTitelDerArbeit{#1}\hypersetup{pdftitle={#1}}}
+\newcommand{\AutorDerArbeit}[1]{\def\DerAutorDerArbeit{#1}\hypersetup{pdfauthor={#1}}}
+\newcommand{\Firma}[1]{\def\DerNameDerFirma{#1}}
+\newcommand{\Kurs}[1]{\def\DieKursbezeichnung{#1}}
+\newcommand{\Abteilung}[1]{\def\DerNameDerAbteilung{#1}}
+\newcommand{\Studiengangsleiter}[1]{\def\DerStudiengangsleiter{#1}}
+\newcommand{\WissBetreuer}[1]{\def\DerWissBetreuer{#1}}
+\newcommand{\FirmenBetreuer}[1]{\def\DerFirmenBetreuer{#1}}
+\newcommand{\Bearbeitungszeitraum}[1]{\def\DerBearbeitungszeitraum{#1}}
+\newcommand{\Abgabedatum}[1]{\def\DasAbgabedatum{#1}}
+\newcommand{\Matrikelnummer}[1]{\def\DieMatrikelnummer{#1}}
+\newcommand{\Studienrichtung}[1]{\def\DieStudienrichtung{#1}}
+\newcommand{\ArtDerArbeit}[1]{\def\DieArtDerArbeit{#1}}
+\newcommand{\Literaturverzeichnis}{Literaturverzeichnis}
+
+% Page Layout
+\oddsidemargin=0mm
+\evensidemargin=0mm
+\textwidth=159mm
+\topmargin=-18mm
+\headsep=10mm
+\textheight=251mm
+\footheight=15mm
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LITERATURVERZEICHNIS
+%
+\addbibresource{bibliography.bib}
+\DefineBibliographyStrings{english}{andothers = {{et\,al\adddot}},}
+
+\input{config}
+
+\ArtDerArbeit{Bachelor} %-thesis
+\TitelDerArbeit{Development of a PoC for a PCIe based Automotive Zonal Architecture}
+\AutorDerArbeit{Philipp Gehrig}
+\Abteilung{}
+\Firma{Mercedes-Benz Group AG}
+\Kurs{Informatik-ITA22}
+\Studienrichtung{IT-Automotive}
+\Matrikelnummer{5622763}
+\Studiengangsleiter{Prof. Dr. Zoltán Zomotor}
+\WissBetreuer{}
+\FirmenBetreuer{Felix Bauer M.Sc.}
+\Bearbeitungszeitraum{24.03.2025 - 09.09.2025}
+\Abgabedatum{09. September 2025}
+
+\begin{document}
+
+\setTitlepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EHRENWÖRTLICHE ERKLÄRUNG
+%
+\input{frontmatter/ewerkl} 
+\cleardoublepage  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	KURZFASSUNG
+%
+\input{frontmatter/acknowledge}
+\cleardoublepage 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% VERZEICHNISSE und ABSTRACT
+%
+\tableofcontents
+\cleardoublepage
+
+% Abbildungsverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\cleardoublepage
+
+%	Tabellenverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+\cleardoublepage
+
+% Listingsverzeichnis / Quelltextverzeichnis
+%\lstlistoflistings
+%\cleardoublepage
+
+% Algorithmenverzeichnis
+%\listofalgorithms
+%\cleardoublepage
+
+% Abkürzungsverzeichnis
+\input{frontmatter/acronyms} 
+\cleardoublepage
+
+\onehalfspacing
+
+% Kurzfassung / Abstract
+\input{frontmatter/abstract} 
+\cleardoublepage
+
+\initializeText
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% KAPITEL UND ANHÄNGE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% KAPITEL
+%
+% Einleitung
+\input{chapters/introduction}
+
+% mehrere Grundlagen- und Forschungs-Kapitel
+\input{chapters/chapter1}
+
+% Fazit und Ausblick
+\input{chapters/conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ANHÄNGE
+%
+\initializeAppendix
+\input{appendix/appendix1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\singlespacing
+
+\printbibliography 
+\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INDEX
+%
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}
