@@ -1,4 +1,4 @@
-# T3000 Bachelor Thesis
+# T3000 Bachelor Thesis: Development of a PoC for a PCIe based Automotive Zonal Architecture
 
 ## Prerequisites
 
