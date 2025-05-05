@@ -45,7 +45,9 @@ jobs:
       continue-on-error: true
       
     - name: Run Zonal example tests
-      run: ./zonal_example
+      run: |
+        ./zonal_example zone1
+        ./zonal_example zone2
       continue-on-error: true
       
     - name: Test results summary
