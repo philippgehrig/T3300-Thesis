@@ -1,6 +1,6 @@
 # Bachelor Thesis and Project
 
-This repository contains all relevant files for my bachelor thesis as well as the project the thesis is written about
+This repository contains all relevant files for my bachelor thesis as well as the project the thesis is written about!
 
 ## Structure
 
