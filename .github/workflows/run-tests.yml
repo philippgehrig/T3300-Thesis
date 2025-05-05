@@ -45,7 +45,7 @@ jobs:
       continue-on-error: true
       
     - name: Run Zonal example tests
-      run: ./test_zonal_example
+      run: ./zonal_example
       continue-on-error: true
       
     - name: Test results summary
@@ -53,4 +53,4 @@ jobs:
         echo "Test Results Summary:"
         [ -f test_pcie_client ] && echo "PCIe Client tests were compiled." || echo "PCIe Client tests failed to compile."
         [ -f test_translation ] && echo "Translation tests were compiled." || echo "Translation tests failed to compile."
-        [ -f test_zonal_example ] && echo "Zonal Example tests were compiled." || echo "Zonal Example tests failed to compile."
+        [ -f zonal_example ] && echo "Zonal Example tests were compiled." || echo "Zonal Example tests failed to compile."
