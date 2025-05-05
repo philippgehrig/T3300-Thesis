@@ -42,7 +42,6 @@ jobs:
 
     - name: Run Translation tests
       run: ./test_translation
-      continue-on-error: true
       
     - name: Test results summary
       run: |
