@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#if defined(__linux__) || defined(__linux) || defined(linux)
 #include <linux/time.h>
+#endif
 #include <stdint.h>
 #include "pcie_common.h"
 #include "pcie_client.h"
