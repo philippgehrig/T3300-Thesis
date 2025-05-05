@@ -1,0 +1,107 @@
+---
+- name: Deploy PCIe Client to Jetson Devices
+  hosts: jetson_devices
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      become: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - build-essential
+          - gcc
+          - make
+          - git
+          - librt-dev  # For -lrt library
+        state: present
+      become: yes
+
+    - name: Create project directory
+      file:
+        path: "{{ target_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy PCIe driver source files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ target_dir }}/{{ item | basename }}"
+        mode: '0644'
+      with_fileglob:
+        - ../pcie/driver/*.c
+        - ../pcie/driver/*.h
+
+    - name: Copy PCIe translation source files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ target_dir }}/{{ item | basename }}"
+        mode: '0644'
+      with_fileglob:
+        - ../translation/*.c
+        - ../translation/*.h
+
+    - name: Copy Makefile for PCIe client
+      copy:
+        content: |
+          CC = gcc
+          CFLAGS = -Wall -Wextra -std=c11 -I. -lrt -pthread
+          
+          # PCIe client binary
+          pcie_client: pcie_client.c pcie_sender.c pcie_receiver.c pcie_translation.c
+          	$(CC) $(CFLAGS) -o pcie_client $^
+          
+          # Install the PCIe client to system
+          install: pcie_client
+          	install -m 755 pcie_client /usr/local/bin/
+          
+          clean:
+          	rm -f pcie_client
+        dest: "{{ target_dir }}/Makefile"
+        mode: '0644'
+
+    - name: Build PCIe client
+      command:
+        cmd: make pcie_client
+        chdir: "{{ target_dir }}"
+      register: build_result
+      changed_when: build_result.rc == 0
+
+    - name: Install PCIe client
+      command:
+        cmd: make install
+        chdir: "{{ target_dir }}"
+      become: yes
+      register: install_result
+      changed_when: install_result.rc == 0
+
+    - name: Setup PCIe client service
+      copy:
+        content: |
+          [Unit]
+          Description=PCIe Client Service
+          After=network.target
+          
+          [Service]
+          Type=simple
+          ExecStart=/usr/local/bin/pcie_client
+          Restart=always
+          User=root
+          
+          [Install]
+          WantedBy=multi-user.target
+        dest: /etc/systemd/system/pcie-client.service
+        mode: '0644'
+      become: yes
+
+    - name: Enable and start PCIe client service
+      systemd:
+        name: pcie-client
+        enabled: yes
+        state: started
+        daemon_reload: yes
+      become: yes
