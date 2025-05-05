@@ -1,0 +1,14 @@
+---
+all:
+  children:
+    jetson_devices:
+      hosts:
+        jetson1:
+          ansible_host: 192.168.1.101  # Replace with actual IP address
+        jetson2:
+          ansible_host: 192.168.1.102  # Replace with actual IP address
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
+        target_dir: /home/nvidia/pcie-client
+        # Note: ansible_user and ansible_password will be provided by --extra-vars
+        # from the load_env.sh script to avoid storing credentials in this file
