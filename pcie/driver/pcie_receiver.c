@@ -102,8 +102,8 @@ int pcie_client_receive(char *buffer, size_t buffer_size) {
     memcpy(buffer, data_region, msg_len);
     
     // Ensure null termination
-    if (buffer_size > 0) {
-        buffer[buffer_size - 1] = '\0';
+    if (msg_len < buffer_size) {
+        buffer[msg_len] = '\0';
     }
     
     pcie_log("Receiver", "Message received successfully via PCIe.");
