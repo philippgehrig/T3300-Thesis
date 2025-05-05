@@ -77,7 +77,11 @@ int pcie_client_send(const char *message) {
     memcpy(data_region, message, msg_len);
     
     // Ensure the write is flushed to the device
-    msync(pcie_map, sizeof(uint32_t) + msg_len, MS_SYNC);
+    if (msync(pcie_map, sizeof(uint32_t) + msg_len, MS_SYNC) == -1) {
+        pcie_log("Sender", "Error: Failed to flush memory to PCIe device.");
+        fprintf(stderr, "msync failed: %s\n", strerror(errno));
+        return -1;
+    }
     
     pcie_log("Sender", "Message sent successfully via PCIe.");
     printf("Message sent via device %s: %s\n", config->device_id, message);
