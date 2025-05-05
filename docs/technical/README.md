@@ -1,3 +1,3 @@
 # Technical Documentation
 
-This document contains the technical documentation explaining the functionallity of the entire project
+This document contains the technical documentation explaining the functionality of the entire project
