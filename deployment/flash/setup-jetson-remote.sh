@@ -6,8 +6,8 @@
 # Default values
 JETSON_HOST=""
 JETSON_USER="nano"
-PROXY_HOST="proxy.cmtcdeu"
-PROXY_PORT="8080"
+PROXY_HOST="192.168.1.1"
+PROXY_PORT="44000"
 NTP_SERVER="53.60.5.254"
 UBUNTU_HOST=""
 COPY_GPG_FILES=false
@@ -21,8 +21,8 @@ function show_usage {
   echo "Options:"
   echo "  --jetson-host HOST    Hostname or IP address of the Jetson Orin Nano (required)"
   echo "  --jetson-user USER    Username for SSH login (default: nano)"
-  echo "  --proxy-host HOST     Set proxy hostname or IP (default: proxy.cmtcdeu)"
-  echo "  --proxy-port PORT     Set proxy port (default: 8080)"
+  echo "  --proxy-host HOST     Set proxy hostname or IP (default: 127.0.0.1)"
+  echo "  --proxy-port PORT     Set proxy port (default: 3128)"
   echo "  --no-proxy            Disable proxy configuration"
   echo "  --ntp-server HOST     Set NTP server hostname or IP (default: 53.60.5.254)"
   echo "  --ubuntu-host HOST    Set Ubuntu host hostname or IP for copying config files"
@@ -103,6 +103,7 @@ echo "Jetson Host:      $JETSON_HOST"
 echo "Jetson User:      $JETSON_USER"
 if [ "$USE_PROXY" = true ]; then
     echo "Proxy:            Enabled (${PROXY_HOST}:${PROXY_PORT})"
+    echo "NOTE: Make sure this is the correct proxy for your network!"
 else
     echo "Proxy:            Disabled"
 fi

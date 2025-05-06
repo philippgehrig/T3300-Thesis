@@ -12,8 +12,9 @@ echo "Jetson Orin Nano Configuration Tool"
 echo "===================================="
 
 # Define default values
-PROXY_HOST="proxy.cmtcdeu"
-PROXY_PORT="8080"
+# NOTE: Default values for Mercedes environment 
+PROXY_HOST="192.168.1.1"
+PROXY_PORT="44000"
 NTP_SERVER="53.60.5.254"
 UBUNTU_HOST=""
 COPY_GPG_FILES=false
@@ -55,8 +56,8 @@ while [[ $# -gt 0 ]]; do
         --help)
             echo "Usage: $0 [options]"
             echo "Options:"
-            echo "  --proxy-host HOST     Set proxy hostname or IP (default: proxy.cmtcdeu)"
-            echo "  --proxy-port PORT     Set proxy port (default: 8080)"
+            echo "  --proxy-host HOST     Set proxy hostname or IP (default: 127.0.0.1)"
+            echo "  --proxy-port PORT     Set proxy port (default: 3128)"
             echo "  --no-proxy            Disable proxy configuration"
             echo "  --ntp-server HOST     Set NTP server hostname or IP (default: 53.60.5.254)"
             echo "  --ubuntu-host HOST    Set Ubuntu host hostname or IP for file copying"
@@ -86,14 +87,14 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/u
 http_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
 https_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
 ftp_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
-no_proxy="localhost,127.0.0.1,::1,.local"
+no_proxy="localhost,127.0.0.1,::1,.local,rd.corpintra.net,git.swf.daimler.com,swf.cloud.corpintra.net,swf.i.mercedes-benz.com,git.i.mercedes-benz.com,accessdtna.daimler-trucksnorthamerica.com"
 EOF
 
     # Also set the environment variables for the current session
     export http_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
     export https_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
     export ftp_proxy="http://${PROXY_HOST}:${PROXY_PORT}"
-    export no_proxy="localhost,127.0.0.1,::1,.local"
+    export no_proxy="localhost,127.0.0.1,::1,.local,rd.corpintra.net,git.swf.daimler.com,swf.cloud.corpintra.net,swf.i.mercedes-benz.com,git.i.mercedes-benz.com,accessdtna.daimler-trucksnorthamerica.com"
     
     echo "Proxy settings configured and applied to current session"
     
@@ -121,6 +122,7 @@ use_proxy=yes
 http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 https_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 ftp_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+no_proxy=localhost,127.0.0.1,::1,.local,rd.corpintra.net,git.swf.daimler.com,swf.cloud.corpintra.net,swf.i.mercedes-benz.com,git.i.mercedes-benz.com,accessdtna.daimler-trucksnorthamerica.com
 EOF
     echo "Wget proxy configuration created"
     
@@ -380,6 +382,8 @@ if [ "$CONNECTIVITY_OK" = false ]; then
     echo "Troubleshooting recommendations:"
     echo "1. Check physical network connection (Ethernet cable)"
     echo "2. Verify proxy settings (current: ${PROXY_HOST}:${PROXY_PORT})"
+    echo "   - For Mercedes environment, try using the correct corporate proxy"
+    echo "   - Common proxy format might be: proxy.company-domain:port"
     echo "3. Test DNS resolution by running 'host nvidia.com'"
     echo "4. Check firewall rules that might block outgoing connections"
     
