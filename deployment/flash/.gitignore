@@ -1,2 +1,3 @@
 /NvidiaOrinRoot/*
 /NvidiaXavierRoot/*
+/proxy-configuration/trusted.gpg.d/*

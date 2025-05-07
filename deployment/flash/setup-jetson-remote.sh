@@ -9,11 +9,9 @@ JETSON_USER="nano"
 PROXY_HOST="192.168.1.1"
 PROXY_PORT="44000"
 NTP_SERVER="53.60.5.254"
-UBUNTU_HOST=""
-COPY_GPG_FILES=false
-COPY_PROXY_CONFIG=false
 USE_TTY=true
 USE_PROXY=true
+USE_LOCAL_CONFIG=true
 
 # Show usage information
 function show_usage {
@@ -21,13 +19,11 @@ function show_usage {
   echo "Options:"
   echo "  --jetson-host HOST    Hostname or IP address of the Jetson Orin Nano (required)"
   echo "  --jetson-user USER    Username for SSH login (default: nano)"
-  echo "  --proxy-host HOST     Set proxy hostname or IP (default: 127.0.0.1)"
-  echo "  --proxy-port PORT     Set proxy port (default: 3128)"
+  echo "  --proxy-host HOST     Set proxy hostname or IP (default: 192.168.1.1)"
+  echo "  --proxy-port PORT     Set proxy port (default: 44000)"
   echo "  --no-proxy            Disable proxy configuration"
   echo "  --ntp-server HOST     Set NTP server hostname or IP (default: 53.60.5.254)"
-  echo "  --ubuntu-host HOST    Set Ubuntu host hostname or IP for copying config files"
-  echo "  --copy-gpg            Copy trusted GPG files from Ubuntu host"
-  echo "  --copy-proxy-conf     Copy 80proxy config from Ubuntu host"
+  echo "  --no-local-config     Don't use local proxy configuration files from repository"
   echo "  --no-tty              Use this if you're running the script non-interactively"
   echo "  --help                Show this help message"
   exit 1
@@ -61,16 +57,8 @@ while [[ $# -gt 0 ]]; do
             NTP_SERVER="$2"
             shift 2
             ;;
-        --ubuntu-host)
-            UBUNTU_HOST="$2"
-            shift 2
-            ;;
-        --copy-gpg)
-            COPY_GPG_FILES=true
-            shift
-            ;;
-        --copy-proxy-conf)
-            COPY_PROXY_CONFIG=true
+        --no-local-config)
+            USE_LOCAL_CONFIG=false
             shift
             ;;
         --no-tty)
@@ -108,19 +96,33 @@ else
     echo "Proxy:            Disabled"
 fi
 echo "NTP Server:       $NTP_SERVER"
-if [ -n "$UBUNTU_HOST" ]; then
-    echo "Ubuntu Host:     $UBUNTU_HOST"
-    if [ "$COPY_GPG_FILES" = true ]; then
-        echo "Copy GPG Files:   Yes"
-    fi
-    if [ "$COPY_PROXY_CONFIG" = true ]; then
-        echo "Copy Proxy Conf:  Yes"
-    fi
+if [ "$USE_LOCAL_CONFIG" = true ]; then
+    echo "Local Config:     Using proxy configuration files from repository"
 else
-    echo "File Copying:    Disabled (no Ubuntu host specified)"
+    echo "Local Config:     Disabled"
 fi
 echo "======================================================="
 echo
+
+# Check if the proxy configuration files exist in the repository
+if [ "$USE_LOCAL_CONFIG" = true ]; then
+    echo "Checking for local proxy configuration files..."
+    
+    # Check for 80proxy file
+    if [ ! -f "${SCRIPT_DIR}/proxy-configuration/80proxy" ]; then
+        echo "WARNING: proxy-configuration/80proxy file not found in the repository."
+    else
+        echo "Found 80proxy file in repository."
+    fi
+    
+    # Check for trusted.gpg.d directory
+    if [ ! -d "${SCRIPT_DIR}/proxy-configuration/trusted.gpg.d" ] || [ -z "$(ls -A ${SCRIPT_DIR}/proxy-configuration/trusted.gpg.d 2>/dev/null)" ]; then
+        echo "INFO: proxy-configuration/trusted.gpg.d directory is empty or not found."
+        echo "GPG keys will not be configured."
+    else
+        echo "Found trusted.gpg.d files in repository."
+    fi
+fi
 
 # Build the command arguments
 CMD_ARGS=""
@@ -133,19 +135,20 @@ fi
 
 CMD_ARGS+=" --ntp-server $NTP_SERVER"
 
-if [ -n "$UBUNTU_HOST" ]; then
-    CMD_ARGS+=" --ubuntu-host $UBUNTU_HOST"
-    if [ "$COPY_GPG_FILES" = true ]; then
-        CMD_ARGS+=" --copy-gpg"
-    fi
-    if [ "$COPY_PROXY_CONFIG" = true ]; then
-        CMD_ARGS+=" --copy-proxy-conf"
-    fi
+if [ "$USE_LOCAL_CONFIG" = false ]; then
+    CMD_ARGS+=" --no-local-config"
 fi
 
-# Execute remotely
-echo "Copying configuration script to Jetson..."
+# Create subdirectory for proxy configuration on remote device
+echo "Creating remote directory for proxy configuration..."
+ssh "$JETSON_USER@$JETSON_HOST" "mkdir -p /tmp/proxy-configuration"
+
+# Copy configuration files to remote device
+echo "Copying scripts and configuration files to Jetson..."
 scp "$SCRIPT_DIR/configureProxy.sh" "$JETSON_USER@$JETSON_HOST:/tmp/"
+
+# Copy proxy configuration directory
+scp -r "$SCRIPT_DIR/proxy-configuration" "$JETSON_USER@$JETSON_HOST:/tmp/"
 
 # Create a small wrapper script to handle sudo with password prompt
 cat > "$SCRIPT_DIR/sudo_wrapper.sh" << 'EOF'

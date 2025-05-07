@@ -1,0 +1,4 @@
+Acquire::http::proxy::ubunturepo.rd.corpintra.net "DIRECT";
+Acquire::http::proxy::hksmirror.rd.corpintra.net "DIRECT";
+Acquire::http::proxy::ubunturepo.us624.corpintra.net "DIRECT";
+Acquire::http::proxy::smtciepucb34.rd.corpintra.net "DIRECT";
