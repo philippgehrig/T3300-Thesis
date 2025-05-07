@@ -17,7 +17,7 @@ echo "===================================="
 # Define default values
 # NOTE: Default values for Mercedes environment 
 PROXY_HOST="192.168.1.1"
-PROXY_PORT="44000"
+PROXY_PORT="3123"
 NTP_SERVER="53.60.5.254"
 USE_LOCAL_CONFIG=true
 USE_PROXY=true

@@ -101,7 +101,7 @@ case $PCIe_CHOICE in
     1) # Host mode
         PCIe_MODE="Host"
         echo "Configuring $CONFIG for PCIe Host mode..."
-        sed -i '/^ODMDATA/d' $CONFIG
+        sed -i '/^ODMDATA/d' $CONFIG.conf
         ;;
     2) # Endpoint mode
         PCIe_MODE="Endpoint"
@@ -109,15 +109,18 @@ case $PCIe_CHOICE in
         case $CHOICE in
             1) # agx orin
                 sed -i '/^ODMDATA/d' $CONFIG.conf
-                sed -i "1s/^/ODMDATA=\"gbe-uphy-config-22,nvhs-uphy-config-1,hsio-uphy-config-0,gbe0-enable-10g,hsstp-lane-map-3\"\n/" $CONFIG.conf
+                # Add ODMDATA at the end of the file to ensure it takes precedence
+                echo 'ODMDATA="gbe-uphy-config-22,nvhs-uphy-config-1,hsio-uphy-config-0,gbe0-enable-10g,hsstp-lane-map-3"' >> $CONFIG.conf
                 ;;
             2) #orin nano
                 sed -i '/^ODMDATA/d' $CONFIG.conf
-                sed -i "1s/^/ODMDATA=\"gbe-uphy-config-8,hsstp-lane-map-3,hsio-uphy-config-41\"\n/" $CONFIG.conf
+                # Add ODMDATA at the end of the file to ensure it takes precedence
+                echo 'ODMDATA="gbe-uphy-config-8,hsstp-lane-map-3,hsio-uphy-config-41"' >> $CONFIG.conf
                 ;;
             3) #agx xavier
                 sed -i '/^ODMDATA/d' $CONFIG.conf
-                sed -i "1s/^/ODMDATA=\"0x09191000\"\n/" $CONFIG.conf
+                # Add ODMDATA at the end of the file to ensure it takes precedence
+                echo 'ODMDATA="0x09191000"' >> $CONFIG.conf
                 ;;
             *)
                 echo "Unknown board for Endpoint mode. Stopping program."

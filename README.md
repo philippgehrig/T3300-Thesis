@@ -15,7 +15,7 @@ This repository contains all relevant files for my bachelor thesis as well as th
  │   ├── 📁 appendix/        # Appendix files (e.g., appendix1, appendix2)
  │   ├── 📁 img/             # Images and figures
  │   ├── 📁 bibliography.bib # Bibliography Sources
- │   └── 📄 README.md        # README explaining the usage of LateX
+ LateX
  ├── 📁 pcie-driver/         # Contains the Translation for PCIe to different BUS systems
  └── 📁 bus-simulation/      # Contains the BUS Simulation for a Raspberry Pi with a CAN-shield
 ```
