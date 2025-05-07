@@ -1,0 +1,8 @@
+# Ignore trusted.gpg.d contents while keeping the directory structure
+/trusted.gpg.d/*
+!trusted.gpg.d/.gitkeep
+
+# Temporary files
+*.tmp
+*.swp
+*~

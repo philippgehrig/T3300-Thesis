@@ -74,12 +74,12 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 echo "Script directory: ${SCRIPT_DIR}"
 
-# Check both possible locations for proxy configuration files
-PROXY_CONFIG_DIR="${SCRIPT_DIR}/proxy-configuration"
+# The proxy config directory is now the same as the script directory
+PROXY_CONFIG_DIR="${SCRIPT_DIR}"
 
 # If we're running from /tmp, the files might have been copied there
-if [[ "$SCRIPT_DIR" == "/tmp" && -d "/tmp/proxy-configuration" ]]; then
-    PROXY_CONFIG_DIR="/tmp/proxy-configuration"
+if [[ "$SCRIPT_DIR" == "/tmp" && -d "/tmp" ]]; then
+    PROXY_CONFIG_DIR="/tmp"
 fi
 
 echo "Proxy configuration directory: ${PROXY_CONFIG_DIR}"
@@ -175,7 +175,7 @@ EOF
         fi
     else
         echo "No 80proxy file found in the repository"
-        echo "Please make sure the 80proxy file is available in the proxy-configuration directory"
+        echo "Please make sure the 80proxy file is available in the proxy directory"
     fi
     
     # Apply proxy environment variables
