@@ -1,5 +1,10 @@
 # Deployment
 
+
+## PCIe-Client
+
+The deployment process automates the installation and configuration of the PCIe client on NVIDIA Jetson devices. This directory contains the necessary Ansible playbooks and scripts to deploy the PCIe client to multiple Jetson devices simultaneously.
+
 This directory contains all the tools, scripts, and configurations needed for deploying and configuring the system on NVIDIA Jetson devices. The deployment process consists of three main components:
 
 1. **Flash** - Scripts and configurations for flashing NVIDIA Jetson devices
@@ -121,6 +126,7 @@ The proxy directory contains tools and configurations for setting up network pro
 
 The PCIe-Client deployment automates the installation and configuration of the PCIe client on NVIDIA Jetson devices. This directory contains the necessary Ansible playbooks and scripts to deploy the PCIe client to multiple Jetson devices simultaneously.
 
+
 ### Prerequisites
 
 - Ansible installed on your deployment machine
@@ -199,6 +205,15 @@ The deployment process:
 - **SSH Connection Issues**: Verify SSH credentials and ensure the Jetson devices are reachable
 - **Build Failures**: Check for required dependencies on the target devices
 - **Service Failures**: Examine logs with `journalctl -u pcie-client`
+
+
+### Advanced Configuration
+
+For additional customization options, modify the `deploy-pcie-client.yml` playbook. Key parameters that can be adjusted include:
+
+- `target_dir`: The directory where the PCIe client is deployed on the target devices
+- Build options in the generated Makefile
+- Service configuration parameters
 
 ## PCIe Endpoint Configuration
 
@@ -335,4 +350,5 @@ A complete workflow for deploying a system would typically involve these steps i
    ```
 
 This complete workflow will prepare a Jetson device with the operating system, network configuration, and PCIe functionality required for the system.
+
 

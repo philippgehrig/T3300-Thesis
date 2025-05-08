@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <linux/time.h>
 #include <stdint.h>
 #include "pcie_common.h"
 #include "pcie_client.h"

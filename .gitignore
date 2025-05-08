@@ -42,3 +42,25 @@
 # Environment files
 .env
 .env.local
+
+.DS_Store
+
+# C/C++ compiled objects and binaries
+*.o
+*.out
+*.exe
+*.so
+*.dll
+*.dylib
+*.a
+*.lib
+
+# Ignore all executables (files without extension in the root directory)
+/*
+!/*.*
+!*/
+
+# Build directories
+build/
+cmake-build-debug/
+cmake-build-release/

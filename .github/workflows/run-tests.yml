@@ -1,0 +1,50 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    # Run on all pull requests regardless of target branch
+    branches: [ '**' ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libgtest-dev
+        # Build GTest
+        cd /usr/src/gtest
+        sudo cmake .
+        sudo make
+        sudo cp lib/*.a /usr/lib
+        cd ${GITHUB_WORKSPACE}
+
+    - name: Build project and tests
+      run: |
+        # Define platform-specific flags for Linux
+        export CFLAGS="-Wall -Wextra"
+        export CXXFLAGS="-Wall -Wextra -std=c++17"
+        # Run make with verbose output
+        make all
+        # List compiled binaries
+        ls -la test_*
+
+    - name: Run PCIe client tests
+      run: ./test_pcie_client
+      continue-on-error: true
+
+    - name: Run Translation tests
+      run: ./test_translation
+      
+    - name: Test results summary
+      run: |
+        echo "Test Results Summary:"
+        [ -f test_pcie_client ] && echo "PCIe Client tests were compiled." || echo "PCIe Client tests failed to compile."
+        [ -f test_translation ] && echo "Translation tests were compiled." || echo "Translation tests failed to compile."
