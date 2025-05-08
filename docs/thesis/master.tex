@@ -38,7 +38,19 @@
 % (!!) FOOTNOTE POSITION NOT RECOMMENDED IN MINT DOMAIN:
 % autocite=footnote
 %
-\usepackage[backend=biber, autocite=inline, style=apa]{biblatex} 	
+\usepackage[backend=biber, 
+            autocite=inline, 
+            style=authoryear,
+            citestyle=authoryear,
+            bibstyle=authoryear,
+            citetracker=true,
+            pagetracker=true,
+            maxcitenames=2]{biblatex}
+            
+% Adding compatibility for parencite with page numbers
+\DeclareFieldFormat{postnote}{#1}
+\DeclareFieldFormat{multipostnote}{#1}
+
 \usepackage{makeidx}                  % allows index generation
 \usepackage{listings}	              %Format Listings properly
 \usepackage{lipsum}                   % Blindtext

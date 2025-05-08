@@ -1,2 +1,266 @@
-\section{\ac{PCIe}}
+\section{Peripheral Component Interconnect Express}
 \label{sec:pcie}
+
+The following section provides an overview of the \ac{PCIe} protocol, its architecture, its history, 
+and its role in modern computing systems. Additionally, it will discuss the advancements in PCIe technology 
+and its impact on data transfer rates and system performance.
+
+\subsection{History and Fundamentals}
+\label{subsec:pcie_history}
+
+\ac{PCIe} is a high-speed serial computer expansion bus standard designed to 
+replace the older \ac{PCI} and \ac{PCI-X} standards. In order to understand 
+the evolution of \ac{PCIe}, it is essential to first understand the principles 
+of its predecessors, \ac{PCI} and \ac{PCI-X}.
+
+The development of modern computer bus architectures has been driven by the 
+growing demand for higher bandwidth, lower latency, and better power 
+efficiency \parencite{budruk2003pci}. This progression 
+has led to significant advancements in how peripherals communicate 
+with computer systems, culminating in the development of \ac{PCIe} as a 
+dominant interconnect technology.
+
+\subsubsection{Evolution of Computer Bus Architectures}
+\label{subsubsec:pcie_evolution_bus}
+
+The history of computer expansion bus technology represents a 
+continuous evolution toward greater speeds, wider data paths, 
+and enhanced functionality. Early personal computers utilized 
+the Industry Standard Architecture (ISA) bus, introduced with 
+the IBM PC/AT in 1984 \parencite{messmer1995pc}. 
+While functional, ISA operated at just 8MHz with an 8-bit 
+or 16-bit data path, creating a significant bottleneck 
+as processor and peripheral speeds increased.
+
+In response to these limitations, several interim standards emerged, 
+including \ac{VLB} and the \ac{EISA} \parencite[pp. 9-10]{abbott2003pci}.
+However, these solutions were eventually superseded by \ac{PCI}, 
+which offered a more scalable and processor-independent approach to peripheral connectivity.
+
+\subsubsection{PCI and PCI-X}
+\label{subsubsec:pcie_pci_pcix}
+
+\ac{PCI} was introduced by Intel in 1992 as a replacement for the \ac{ISA} 
+bus \parencite{anderson1999pci}. \ac{PCI} operated as a parallel 
+bus architecture with a 33 MHz clock speed and 32-bit data width, providing 
+a maximum theoretical bandwidth of 133 MB/s \parencite{shanley2000pcix}. 
+This represented a significant improvement over previous standards, enabling more 
+efficient communication between the \ac{CPU} and peripheral devices.
+
+The design philosophy behind \ac{PCI} was revolutionary for its time, introducing 
+several key innovations \parencite[pp. 11, 92-105, 189]{abbott2003pci}:
+
+\begin{itemize}
+    \item \textbf{Processor independence}: Unlike earlier buses that were tightly 
+    coupled to the CPU's architecture, PCI was designed to be processor-agnostic.
+    \item \textbf{Bus mastering}: PCI devices could take control of the bus and 
+    initiate transactions without CPU intervention, significantly improving multitasking capabilities.
+    \item \textbf{Plug and Play}: PCI introduced automated device configuration, 
+    eliminating the need for manual jumper settings that plagued earlier expansion cards.
+\end{itemize}
+
+As computing demands increased, the \ac{PCI} standard evolved into \ac{PCI-X} in 
+1998 \parencite{shanley2000pcix}. \ac{PCI-X} maintained backward compatibility 
+while increasing the bus frequency to 66 MHz, 133 MHz, and eventually 533 MHz in 
+\ac{PCI-X} 2.0, enabling theoretical bandwidths of up to 4.3 GB/s. The \ac{PCI-X} 
+standard was developed specifically to address the growing bandwidth demands of 
+server applications, particularly for high-performance network and storage 
+interfaces \parencite{shanley2000pcix}.
+
+However, both \ac{PCI} and \ac{PCI-X} faced inherent limitations due to their parallel bus architecture:
+
+\begin{itemize}
+    \item \textbf{Signal integrity issues}: As frequencies increased, maintaining signal 
+    integrity across multiple parallel lines became increasingly challenging 
+    \parencite{wilen2003understanding}. At higher clock rates, 
+    timing skew and cross-talk between adjacent traces created significant signal integrity problems.
+    
+    \item \textbf{Shared bandwidth}: All devices on the bus shared the same bandwidth, 
+    creating bottlenecks in data-intensive applications 
+    \parencite{budruk2003pci}. This shared resource model meant 
+    that a single bandwidth-hungry device could degrade performance for all 
+    other components on the same bus.
+    
+    \item \textbf{Complex routing}: The parallel architecture required complex 
+    routing on motherboards and made high-speed operation difficult beyond 
+    short distances \parencite{budruk2003pci}. The large number 
+    of signal traces created challenges for motherboard design and limited 
+    practical bus lengths.
+    
+    \item \textbf{Limited scalability}: The bus topology placed fundamental 
+    limits on clock speeds and the number of supported devices 
+    \parencite{anderson1999pci}. Each additional device added 
+    electrical load to the bus, constraining maximum achievable frequencies.
+    
+    \item \textbf{Voltage issues}: Maintaining consistent voltage levels 
+    across multiple devices operating at higher speeds became increasingly 
+    difficult \parencite[pp.~112-115]{abbott2003pci}.
+\end{itemize}
+
+These limitations, coupled with the rapidly increasing performance requirements of 
+modern computing systems, necessitated a fundamentally new approach to peripheral 
+connectivity, ultimately leading to the development of \ac{PCIe}.
+
+\subsubsection{Creation of PCIe}
+\label{subsubsec:pcie_creation}
+
+The development of \ac{PCIe} began in the late 1990s under the code name 
+"Arapahoe" as a collaborative effort between several major technology companies, 
+including Intel, Dell, IBM, and HP. In 2001, the technology was transferred to the \ac{PCI-SIG}, 
+the industry organization responsible for specifying the \ac{PCI} 
+family of standards. The first draft specification was completed in 2002, 
+with the official \ac{PCIe} 1.0 specification released in 2003 
+\parencite{pcisig2003}. This marked a revolutionary shift in computer 
+architecture, moving from the shared parallel bus paradigm to a serial, 
+point-to-point topology.
+
+The fundamental innovation of \ac{PCIe} was its adoption of serialized 
+data transmission over differential pairs, which provided several 
+critical advantages \parencite{johnson2010pcie}:
+
+\begin{itemize}
+    \item \textbf{Superior signal integrity}: Differential signaling offered much 
+    better noise immunity and allowed for higher clock rates.
+    
+    \item \textbf{Point-to-point connectivity}: Each device had a dedicated link to 
+    either a switch or the root complex, eliminating shared bandwidth bottlenecks.
+    
+    \item \textbf{Scalable performance}: The introduction of "lanes" allowed 
+    bandwidth to scale linearly with the number of lane pairs allocated to a device.
+    
+    \item \textbf{Lower pin count}: Serial transmission drastically reduced the 
+    number of physical pins required for connectors.
+\end{itemize}
+
+From its inception, \ac{PCIe} was designed for backward compatibility at the 
+software level, allowing existing operating systems and drivers to work with 
+\ac{PCIe} devices with minimal modification \parencite{budruk2003pci}. 
+This design philosophy ensured rapid industry adoption despite the radical changes 
+in physical implementation.
+
+\subsection{Generational Evolution of PCIe}
+\label{subsec:pcie_evolution}
+
+Since its introduction, \ac{PCIe} has undergone several generational advancements, 
+each doubling the bandwidth of its predecessor while maintaining backward 
+compatibility \parencite{pcisig2019}. This evolutionary approach 
+has ensured the longevity and widespread adoption of the standard across 
+various computing platforms. Table \ref{tab:pcie_generations} summarizes 
+the key characteristics of each \ac{PCIe} generation.
+
+\begin{table}[ht]
+\centering
+\caption{\ac{PCIe} Generations and Their Specifications}
+\label{tab:pcie_generations}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Generation} & \textbf{Year} & \textbf{Data Rate} & \textbf{Encoding} & \textbf{Bandwidth per Lane} \\
+\hline
+\acs{PCIe} 1.0 & 2003 & 2.5 \acs{GT/s} & 8b/10b & 250 MB/s \\ 
+\acs{PCIe} 2.0 & 2007 & 5 \acs{GT/s} & 8b/10b & 500 MB/s \\ 
+\acs{PCIe} 3.0 & 2010 & 8 \acs{GT/s} & 128b/130b & 985 MB/s \\ 
+\acs{PCIe} 4.0 & 2017 & 16 \acs{GT/s} & 128b/130b & 1969 MB/s \\ 
+\acs{PCIe} 5.0 & 2019 & 32 \acs{GT/s} & 128b/130b & 3938 MB/s \\ 
+\acs{PCIe} 6.0 & 2022 & 64 \acs{GT/s} & \acs{PAM4}/\acs{FLIT} & 7877 MB/s \\ 
+\acs{PCIe} 7.0* & 2025* & 128 \acs{GT/s} & \acs{PAM4}/\acs{FLIT} & 15754 MB/s \\
+\hline
+\end{tabular}
+\begin{flushleft}
+\small{* Projected specifications based on \ac{PCI-SIG} announcements \parencite{pcisig2023}}
+\end{flushleft}
+\end{table}
+
+\ac{PCIe} 1.0 established the foundation with its 2.5 \ac{GT/s} data rate and 
+8b/10b encoding scheme, resulting in 250 MB/s of effective bandwidth per direction 
+per lane \parencite{budruk2003pci}. While modest by today's standards, 
+this offered a significant improvement over \ac{PCI-X} for many applications, 
+especially when aggregated across multiple lanes.
+
+\ac{PCIe} 2.0, introduced in 2007, maintained the same encoding but doubled 
+the transfer rate to 5 \ac{GT/s}, effectively doubling the bandwidth 
+\parencite{pcisig2007}. This generation also introduced improved 
+power management features, reflecting the growing importance of energy 
+efficiency in computing systems \parencite{johnson2010pcie}.
+
+A significant advancement came with \ac{PCIe} 3.0 in 2010, which not only 
+increased the transfer rate to 8 \ac{GT/s} but also implemented a more 
+efficient 128b/130b encoding scheme \parencite{pcisig2010}. 
+This change reduced the encoding overhead from 20\% to approximately 
+1.5\%, resulting in nearly 1 GB/s of bandwidth per lane in each direction. 
+The introduction of this more efficient encoding was a critical innovation 
+that significantly boosted effective throughput.
+
+After a longer development cycle, \ac{PCIe} 4.0 was released in 2017, 
+continuing the trend of doubling transfer rates to reach 16 \ac{GT/s} while 
+maintaining the 128b/130b encoding, delivering approximately 2 GB/s per 
+lane \parencite{pcisig2017}. This generation was particularly 
+important for high-bandwidth applications such as graphics processing, 
+machine learning acceleration, and high-performance storage.
+
+\ac{PCIe} 5.0 followed relatively quickly in 2019, with transfer rates 
+reaching 32 \ac{GT/s} with the same encoding scheme, effectively 
+providing almost 4 GB/s per lane \parencite{pcisig2019}. 
+The rapid progression from \ac{PCIe} 4.0 to 5.0—taking only about 
+two years—reflected the increasing demands of data-intensive applications 
+and the maturation of the development process.
+
+\ac{PCIe} 6.0, finalized in 2022, represents a more fundamental 
+shift in the standard's approach \parencite{pcisig2022}. 
+While maintaining the doubled transfer rate pattern (64 \ac{GT/s}), 
+it introduced \ac{PAM4} signaling and \ac{FLIT}-based encoding. \ac{PAM4} 
+encodes two bits per symbol instead of one, allowing twice the data rate 
+without increasing the fundamental frequency, which helps address signal 
+integrity challenges at higher speeds. 
+The \ac{FLIT} encoding scheme further optimizes transmission efficiency 
+and incorporates \ac{FEC} to maintain reliability at these higher speeds.
+
+Looking ahead, \ac{PCIe} 7.0 is currently under development with a projected 
+release around 2025, aiming to continue the trend of doubling bandwidth to 
+128 \ac{GT/s} using \ac{PAM4} signaling, potentially delivering approximately 
+15.8 GB/s per lane in each direction \parencite{pcisig2023}. These 
+continued advancements demonstrate \ac{PCIe}'s adaptability and its critical 
+role in addressing the ever-increasing bandwidth demands of modern computing 
+systems \parencite{mangla2019pcie}.
+
+\subsection{Architectural Foundations}
+\label{subsec:pcie_architecture_foundations}
+
+The fundamental architecture of \ac{PCIe} consists of a layered protocol stack 
+that separates different aspects of the communication process, providing 
+flexibility and extensibility \parencite[pp.~22-26]{pcisig2003}. This layered 
+approach consists of three primary protocol layers:
+
+\begin{itemize}
+    \item \textbf{Transaction Layer}: The uppermost layer responsible for generating 
+    and processing \ac{TLP}s \parencite{budruk2003pci}. It manages end-to-end 
+    communications, credit-based flow control, and quality of service mechanisms.
+    \item \textbf{Data Link Layer}: The middle layer ensures reliable data transfer 
+    by adding sequence numbers and \ac{CRC} protection to \ac{TLP}s, forming 
+    \ac{DLLP}s \parencite{wilen2003understanding}. It handles packet 
+    acknowledgment, retransmission of failed packets, and link power management.
+    \item \textbf{Physical Layer}: The lowest layer deals with the electrical 
+    aspects of transmitting and receiving serialized data \parencite{budruk2003pci}. 
+    It manages lane initialization, training, and power management state transitions.
+\end{itemize}
+
+Unlike the shared bus architecture of \ac{PCI}, \ac{PCIe} implements 
+a point-to-point topology built around three primary components: endpoints, 
+switches, and root complexes \parencite[pp.~82-88]{solari2005pci}. 
+This topology creates a hierarchical structure that enables more 
+efficient data routing and resource allocation.
+
+The root complex serves as the central connection point between 
+the \ac{CPU}, memory subsystem, and \ac{PCIe} fabric, initiating 
+configuration cycles and managing the enumeration process that 
+identifies connected devices during system initialization 
+\parencite{budruk2003pci}. \ac{PCIe} switches 
+function as packet routing devices, directing traffic between 
+multiple endpoints and the root complex \parencite[pp.~75-83]{wilen2003understanding}.
+
+The addressing scheme in \ac{PCIe} uses a three-component system 
+consisting of a bus number, device number, and function number 
+(\ac{BDF}), similar to \ac{PCI} but expanded to accommodate the 
+hierarchical topology \parencite[pp.~145-150]{solari2005pci}. 
+This addressing scheme ensures that each function within the 
+\ac{PCIe} hierarchy has a unique identifier, enabling precise 
+routing of transactions throughout the fabric.
