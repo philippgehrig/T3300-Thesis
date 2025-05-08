@@ -1,10 +1,12 @@
 CC = g++
+
 CFLAGS = -Wall -Wextra -std=c++17 -I./pcie/driver -I./translation -I./tests
 CFLAGS_C = -Wall -Wextra -I./pcie/driver -I./translation
 
 # For C files
 CC_C = gcc
 STD_C = -std=c11
+
 
 # OS detection
 UNAME_S := $(shell uname -s)
@@ -21,6 +23,7 @@ else
     GTEST_LIBS = -lgtest -lgtest_main -pthread
     LIBS = -lrt -pthread
 endif
+
 
 DRIVER_SRCS = pcie/driver/pcie_client.c pcie/driver/pcie_sender.c pcie/driver/pcie_receiver.c pcie/driver/pcie_common.h
 TRANSLATION_SRCS = translation/pcie_translation.c translation/pcie_translation.h
