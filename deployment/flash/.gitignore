@@ -1,3 +1,8 @@
-/NvidiaOrinRoot/*
-/NvidiaXavierRoot/*
-/proxy-configuration/trusted.gpg.d/*
+# Ignore contents of nano directories while keeping the directories themselves
+nano_rootport/*
+nano_endpoint/*
+
+# But don't ignore the .gitkeep files
+!nano_rootport/.gitkeep
+!nano_endpoint/.gitkeep
+
