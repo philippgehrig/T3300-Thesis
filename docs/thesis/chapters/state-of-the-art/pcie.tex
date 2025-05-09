@@ -245,7 +245,7 @@ approach consists of three primary protocol layers:
 
 Unlike the shared bus architecture of \ac{PCI}, \ac{PCIe} implements 
 a point-to-point topology built around three primary components: endpoints, 
-switches, and root complexes \parencite[pp.~82-88]{solari2005pci}. 
+switches, and root complexes \parencite{solari2005pci}. 
 This topology creates a hierarchical structure that enables more 
 efficient data routing and resource allocation.
 
@@ -255,12 +255,12 @@ configuration cycles and managing the enumeration process that
 identifies connected devices during system initialization 
 \parencite{budruk2003pci}. \ac{PCIe} switches 
 function as packet routing devices, directing traffic between 
-multiple endpoints and the root complex \parencite[pp.~75-83]{wilen2003understanding}.
+multiple endpoints and the root complex \parencite{wilen2003understanding}.
 
 The addressing scheme in \ac{PCIe} uses a three-component system 
 consisting of a bus number, device number, and function number 
 (\ac{BDF}), similar to \ac{PCI} but expanded to accommodate the 
-hierarchical topology \parencite[pp.~145-150]{solari2005pci}. 
+hierarchical topology \parencite{solari2005pci}. 
 This addressing scheme ensures that each function within the 
 \ac{PCIe} hierarchy has a unique identifier, enabling precise 
 routing of transactions throughout the fabric.
